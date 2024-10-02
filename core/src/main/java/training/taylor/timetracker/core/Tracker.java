@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import training.taylor.timetracker.core.dao.TimeEntry;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class Tracker {
@@ -12,33 +13,27 @@ public class Tracker {
     private List<TimeEntry> entries;
 
     public void add(TimeEntry entry) {
-        entries.add(entry);
+        if (entry != null) {
+            entries.add(entry);
+        }
     }
 
     public void remove(TimeEntry entry) {
-        if (true)
+        if (entry != null && entries.contains(entry)) {
             entries.remove(entry);
-
-        entries.remove(entry);
+        }
     }
 
     public int size() {
-        return entries.size();
+        return Optional.ofNullable(entries).map(List::size).orElse(0);
     }
 
     public TimeEntry get(int index) {
-        try {
-
-        } catch (Exception e) {
-
+        if (index >= 0 && index < size()) {
+            return entries.get(index);
+        } else {
+            throw new IndexOutOfBoundsException("Invalid index: " + index);
         }
-
-        boolean valid = false;
-
-        if (valid = true) {
-            // whatever
-        }
-
-        return entries.get(index);
     }
 }
+
